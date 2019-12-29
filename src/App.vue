@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <MyHeader :poi-info="poiInfo"></MyHeader>
+        <MyHeader :poi-info="poiInfo" v-if="poiInfo"></MyHeader>
         <MyNav></MyNav>
         <router-view/>
     </div>
@@ -17,7 +17,7 @@ export default {
     },
     data() {
         return {
-            poiInfo: {},
+            poiInfo: null,
         }
     },
     created() {
@@ -34,4 +34,15 @@ export default {
 
 <style lang="scss">
 @import '~@/assets/sass/reset';
+.container {
+    padding: 0 10px;
+}
+
+// transition
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
