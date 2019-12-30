@@ -30,6 +30,7 @@
                 <div class="bulletin-detail__content" :style="{ backgroundImage: `url(${poiInfo.poi_back_pic_url})` }">
                     <img class="bulletin-detail__content--pic" :srcset="`${poiInfo.pic_url} 2x`" alt="">
                     <p class="bulletin-detail__content--name">{{poiInfo.name}}</p>
+                    <star-rating :rating="poiInfo.wm_poi_score" :read-only="true" :star-size="10" :padding="3" :round-start-rating="false" text-class="score"></star-rating>
                     <ul class="bulletin-detail__content--tip">
                         <li>{{poiInfo.min_price_tip}}</li>
                         <li>{{poiInfo.shipping_fee_tip}}</li>
@@ -50,11 +51,15 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating';
 export default {
     props: {
         poiInfo: {
             type: Object
         }
+    },
+    components: {
+        StarRating,
     },
     data() {
         return {
@@ -176,12 +181,18 @@ export default {
             margin-bottom: 13px;
         }
         &--name {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
+            color: #fff;
+            font-size: 15px;
+        }
+        /deep/ .score {
+            margin-top: 4px;
             color: #fff;
             font-size: 15px;
         }
         &--tip {
             display: flex;
+            margin-top: .5em;
             margin-bottom: 13px;
             color: #bababc;
             font-size: 12px;
