@@ -90,7 +90,7 @@ export default {
         outline: none;
         border: none;
         border-radius: 15px;
-        background: rgb(204, 204, 204) url('~@/assets/images/icon-search@2x.png') 1em 50%/15px 15px no-repeat;
+        background: rgb(204, 204, 204) url('icon-search@2x.png') 1em 50%/15px 15px no-repeat;
     }
     &__spelling {
         border: 1px solid #fff;
@@ -135,7 +135,7 @@ export default {
             margin-bottom: 5px;
             width: 28px;
             height: 28px;
-            background: url('~@/assets/images/icon-star.png') 0/contain;
+            background: url('icon-star.png') 0/contain;
             content: '';
         }
     }

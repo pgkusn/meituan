@@ -8,8 +8,8 @@
 
 <script>
 import axios from 'axios';
-import MyHeader from '@/components/MyHeader.vue';
-import MyNav from '@/components/MyNav.vue';
+import MyHeader from '@/components/MyHeader/MyHeader.vue';
+import MyNav from '@/components/MyNav/MyNav.vue';
 export default {
     components: {
         MyHeader,
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@/assets/sass/reset';
+@import '~@/assets/reset';
 .container {
     padding: 0 10px;
 }
@@ -42,7 +42,7 @@ export default {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 </style>
