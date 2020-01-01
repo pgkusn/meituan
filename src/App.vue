@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import MyHeader from '@/components/MyHeader/MyHeader.vue';
 import MyNav from '@/components/MyNav/MyNav.vue';
 export default {
@@ -15,34 +14,39 @@ export default {
         MyHeader,
         MyNav,
     },
-    data() {
-        return {
-            poiInfo: null,
+    computed: {
+        poiInfo() {
+            return this.$store.state.goods && this.$store.state.goods.poi_info;
         }
     },
     created() {
-        axios.get('data/goods.json')
-            .then(res => {
-                if (res.data.code === 0) {
-                    this.poiInfo = res.data.data.poi_info;
-                }
-            })
-            .catch(err => console.error(err));
+        this.$store.dispatch('getGoods');
     },
 }
 </script>
 
 <style lang="scss">
 @import '~@/assets/reset';
+html,
+body {
+    height: 100%;
+}
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 .container {
     padding: 0 10px;
 }
 
 // transition
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
