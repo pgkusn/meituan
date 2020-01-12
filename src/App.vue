@@ -2,7 +2,9 @@
     <div id="app">
         <MyHeader :poi-info="poiInfo" v-if="poiInfo"></MyHeader>
         <MyNav></MyNav>
-        <router-view/>
+        <keep-alive>
+            <router-view/>
+        </keep-alive>
     </div>
 </template>
 
