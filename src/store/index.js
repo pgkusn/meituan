@@ -11,7 +11,7 @@ export default new Vuex.Store({
     mutations: {
         setGoods(state, payload) {
             state.goods = payload;
-        }
+        },
     },
     actions: {
         getGoods({ commit }) {

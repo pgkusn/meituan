@@ -41,7 +41,7 @@
 								</div>
 							</div>
 							<div class="cartcontrol-wrapper">
-								<!-- <Cartcontrol :food='food'></Cartcontrol> -->
+								<!-- <Cartcontrol></Cartcontrol> -->
 							</div>
 						</li>
 					</ul>
@@ -55,8 +55,13 @@
 </template>
 
 <script>
+import Cartcontrol from '@/components/Cartcontrol/Cartcontrol.vue';
+
 export default {
     name: 'Shopcart',
+    components: {
+        Cartcontrol,
+    },
     props: {
         poiInfo: {
             type: Object,
@@ -65,16 +70,7 @@ export default {
         selectFoods: {
             type: Array,
             default() {
-                return [
-                    {
-                        count: 1,
-                        min_price: 100
-                    },
-                    {
-                        count: 2,
-                        min_price: 200
-                    },
-                ]
+                return []
             }
         },
     },

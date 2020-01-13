@@ -7,6 +7,7 @@
                 </li>
                 <li :class="{ active: currentIndex === idx + 1 }" v-for="(item, idx) in foods" :key="item.name" @click="selectMenu(idx + 1)">
                     <p><img :src="item.icon" v-if="item.icon">{{item.name}}</p>
+                    <i class="num" v-show="getCount(item.spus)">{{getCount(item.spus)}}</i>
                 </li>
             </ul>
         </div>
@@ -20,21 +21,27 @@
                 <li class="foods__food-list js-list-hook" v-for="item in foods" :key="item.name">
                     <h3 class="foods__food-list--title">{{item.name}}</h3>
                     <ul>
-                        <li class="foods__food-list--item" v-for="spu in item.spus" :key="spu.name">
-                            <div class="icon" :style="{ backgroundImage: `url(${spu.picture})` }"></div>
-                            <h3>{{spu.name}}</h3>
+                        <li class="foods__food-list--item" v-for="food in item.spus" :key="food.name">
+                            <div class="icon" :style="{ backgroundImage: `url(${food.picture})` }"></div>
+                            <h3>{{food.name}}</h3>
+
+                            <div class="cartcontrol-wrapper">
+								<Cartcontrol :food="food"></Cartcontrol>
+							</div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <Shopcart :poi-info="poiInfo"></Shopcart>
+        <Shopcart :poi-info="poiInfo" :select-foods="selectFoods"></Shopcart>
     </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll';
 import Shopcart from '@/components/Shopcart/Shopcart.vue';
+import Cartcontrol from '@/components/Cartcontrol/Cartcontrol.vue';
+
 export default {
     name: 'goods',
     data() {
@@ -47,6 +54,7 @@ export default {
     },
     components: {
         Shopcart,
+        Cartcontrol,
     },
     computed: {
         goods() {
@@ -71,6 +79,17 @@ export default {
                 }
             }
         },
+        selectFoods() {
+            let foods = [];
+            this.foods.forEach(item => {
+                item.spus.forEach(food => {
+                    if (food.count) {
+                        foods.push(food);
+                    }
+                });
+            });
+            return foods;
+        }
     },
     methods: {
         preloadImg(imgs) {
@@ -92,7 +111,7 @@ export default {
         },
         initBScroll() {
             this.menuBScroll = new BScroll(this.$refs.menu, { click: true });
-            this.foodsBScroll = new BScroll(this.$refs.foods, { probeType: 3 });
+            this.foodsBScroll = new BScroll(this.$refs.foods, { probeType: 3, click: true });
             this.foodsBScroll.on('scroll', pos => {
                 this.scrollY = Math.abs(Math.round(pos.y));
             });
@@ -112,6 +131,19 @@ export default {
             this.foodsBScroll.scrollTo(0, -this.listHeight[index], 250);
             // 原生JS
             // this.$refs.foods.scroll({ top: this.listHeight[index], behavior: 'smooth' });
+        },
+        getCount(foods) {
+            // return foods.reduce((accu, current, index, array) => {
+            //     return array[index].count ? accu + current.count : accu + 0;
+            // });
+
+            let count = 0;
+            foods.forEach(item => {
+                if (item.count) {
+                    count += item.count;
+                }
+            });
+            return count;
         }
     },
     watch: {
@@ -138,6 +170,7 @@ export default {
     // overflow: auto; // 原生JS
     width: 85px;
     li {
+        position: relative;
         padding: 17px 11px;
         background-color: rgb(244, 244, 244);
         &.active {
@@ -160,6 +193,19 @@ export default {
     img {
         margin-right: 6px;
         width: 15px;
+    }
+    .num {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+        text-align: center;
+        font-size: 7px;
+        line-height: 13px;
     }
 }
 .foods {
@@ -201,5 +247,10 @@ export default {
             }
         }
     }
+}
+.cartcontrol-wrapper {
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 </style>
