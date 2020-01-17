@@ -2,7 +2,7 @@
     <div class="shopcart">
         <div class="shopcart-wrapper">
             <div class="content-left">
-				<div class="logo-wrapper" :class="{ highlight: selectFoods.length }">
+				<div class="logo-wrapper" :class="{ highlight: selectFoods.length }" @click="toggleList">
 					<span class="icon-shopping_cart logo" :class="{ highlight: selectFoods.length }"></span>
 					<i class="num" v-show="totalCount">{{totalCount}}</i>
 				</div>
@@ -16,45 +16,45 @@
 				{{selectFoods.length ? '去結算' : poiInfo.min_price_tip}}
 			</div>
 
-			<div class="shopcart-list">
-				<div class="list-top">
-					新用户立减17元,首次使用银行卡支付最高再减3元
+			<div class="shopcart-list" v-show="listShow">
+				<div class="list-top" v-if="poiInfo.discounts2[0]">
+					{{poiInfo.discounts2[0].info}}
 				</div>
 				<div class="list-header">
 					<h3 class="title">1号口袋</h3>
-					<div class="empty">
+					<div class="empty" @click="emptyCart">
 						<img src="./ash_bin.png" />
 						<span>清空购物车</span>
 					</div>
 				</div>
 				<div class="list-content" ref='listContent'>
 					<ul>
-						<li class="food-item">
+						<li class="food-item" v-for="(food, idx) in selectFoods" :key="idx">
 							<div class="desc-wrapper">
 								<div class="desc-left">
-									<p class="name">脆香油条</p>
-									<p class="unit">例</p>
-									<p class="description"></p>
+									<p class="name">{{food.name}}</p>
+									<p class="unit" v-show="!food.description">{{food.unit}}</p>
+									<p class="description" v-if="food.description">{{food.description}}</p>
 								</div>
 								<div class="desc-right">
-									<span class="price">￥5.5</span>
+									<span class="price">￥{{food.min_price}}</span>
 								</div>
 							</div>
 							<div class="cartcontrol-wrapper">
-								<!-- <Cartcontrol></Cartcontrol> -->
+								<Cartcontrol :food="food"></Cartcontrol>
 							</div>
 						</li>
 					</ul>
 				</div>
 				<div class="list-bottom"></div>
 			</div>
-
-            <!-- <div class="shopcart-mask"></div> -->
         </div>
+        <div class="shopcart-mask" v-show="listShow" @click="toggleList"></div>
     </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll';
 import Cartcontrol from '@/components/Cartcontrol/Cartcontrol.vue';
 
 export default {
@@ -74,6 +74,12 @@ export default {
             }
         },
     },
+    data() {
+        return {
+            listOpen: false,
+            listBScroll: null,
+        }
+    },
     computed: {
         totalCount() {
             return this.selectFoods.reduce((accu, current) => {
@@ -85,6 +91,27 @@ export default {
                 return accu + current.count * current.min_price;
             }, 0);
         },
+        listShow() {
+            return this.selectFoods.length > 0 && this.listOpen;
+        }
+    },
+    watch: {
+        listShow(value) {
+            if (value && !this.listBScroll) {
+                this.listBScroll = new BScroll(this.$refs.listContent, { click: true });
+            }
+            else {
+                this.listBScroll.refresh();
+            }
+        }
+    },
+    methods: {
+        toggleList() {
+            this.listOpen = this.selectFoods.length > 0 && !this.listOpen;
+        },
+        emptyCart() {
+            this.selectFoods.forEach(food => food.count = 0);
+        }
     },
 }
 </script>
@@ -283,7 +310,7 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 98px;
+    z-index: 98;
     width: 100%;
     height: 100%;
     background: rgba(7,17,27,.6);

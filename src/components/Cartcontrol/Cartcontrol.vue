@@ -29,7 +29,7 @@ export default {
         },
         addCart() {
             let count = this.food.count ? this.food.count + 1 : 1;
-            Vue.set(this.food, 'count', count);
+			Vue.set(this.food, 'count', count);
         }
     },
 }
